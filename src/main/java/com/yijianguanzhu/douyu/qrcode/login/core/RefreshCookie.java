@@ -12,6 +12,7 @@ import org.apache.http.ParseException;
 import org.apache.http.util.EntityUtils;
 
 import com.beust.jcommander.internal.Maps;
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.yijianguanzhu.douyu.qrcode.login.core.config.DouyuHttpRequestConfig;
 import com.yijianguanzhu.douyu.qrcode.login.enums.Mode;
 import com.yijianguanzhu.douyu.qrcode.login.exception.CookieRefreshFailedException;
@@ -39,11 +40,12 @@ public final class RefreshCookie {
 		headers.putAll( DouyuHttpRequestConfig.REFRESH_COOKIE_URL_HEADERS );
 
 		final HttpResponse response = Http.getHttpResponse( DouyuHttpRequestConfig.REFRESH_COOKIE_URL, headers, Mode.GET );
-		Map<?, ?> data = null;
+		Map<String, Object> data = null;
 		try {
 			String resp = EntityUtils.toString( response.getEntity(), StandardCharsets.UTF_8 );
 			resp = resp.replace( "(", "" ).replace( ")", "" );
-			data = Message2BeanUtil.bean( resp, Map.class );
+			data = Message2BeanUtil.bean( resp, new TypeReference<Map<String, Object>>() {
+			} );
 		}
 		catch ( ParseException | IOException e ) {
 			log.warn( "cookie刷新失败" );

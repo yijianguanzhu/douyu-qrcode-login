@@ -14,6 +14,7 @@ import org.apache.http.HttpResponse;
 import org.apache.http.entity.ContentType;
 import org.apache.http.util.EntityUtils;
 
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.yijianguanzhu.douyu.qrcode.login.core.model.SuccessScanQRCode;
 import com.yijianguanzhu.douyu.qrcode.login.enums.Mode;
 import com.yijianguanzhu.douyu.qrcode.login.exception.QRCodeAbortLoginException;
@@ -53,14 +54,15 @@ public class DefaultWaitScanQRCodeRunnable implements Runnable {
 			return;
 		}
 
-		Map<?, ?> result = null;
+		Map<String, Object> result = null;
 		HttpResponse response = null;
 		try {
 			response = Http.getHttpResponse(
 					String.format( DouyuHttpRequestConfig.QRCODE_IS_SCAN_URL, currentTimeMillis, code ),
 					null, DouyuHttpRequestConfig.QRCODE_IS_SCAN_URL_HEADERS, Mode.GET, ContentType.APPLICATION_FORM_URLENCODED );
 			final String resp = EntityUtils.toString( response.getEntity(), StandardCharsets.UTF_8 );
-			result = Message2BeanUtil.bean( resp, Map.class );
+			result = Message2BeanUtil.bean( resp, new TypeReference<Map<String, Object>>() {
+			} );
 		}
 		catch ( Exception e ) {
 			log.error( "Un-Excepted Error occured. Cause By: \n", e );

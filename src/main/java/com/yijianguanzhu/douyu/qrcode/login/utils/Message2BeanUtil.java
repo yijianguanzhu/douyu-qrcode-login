@@ -7,6 +7,7 @@ import java.io.IOException;
 
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.core.JsonParser.Feature;
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -28,5 +29,9 @@ public class Message2BeanUtil {
 
 	public static <T> T bean( String jsonString, Class<T> clazz ) throws IOException {
 		return JACKSONMAPPER.readValue( jsonString, clazz );
+	}
+
+	public static <T> T bean( String jsonString, TypeReference<T> valueTypeRef ) throws IOException {
+		return JACKSONMAPPER.readValue( jsonString, valueTypeRef );
 	}
 }

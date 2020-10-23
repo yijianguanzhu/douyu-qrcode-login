@@ -102,11 +102,12 @@ public final class DouyuLogin {
 	public static Map<String, String> getDouyuCookie( SuccessScanQRCode succ ) {
 		String url = String.format( DouyuHttpRequestConfig.LOGIN_URL, succ.getUrl(), System.currentTimeMillis() );
 		HttpResponse response = Http.getHttpResponse( url, DouyuHttpRequestConfig.LOGIN_URL_HEADERS, Mode.GET );
-		Map<?, ?> data = null;
+		Map<String, Object> data = null;
 		try {
 			String resp = EntityUtils.toString( response.getEntity(), StandardCharsets.UTF_8 );
 			resp = resp.replace( "appClient_json_callback(", "" ).replace( ")", "" );
-			data = Message2BeanUtil.bean( resp, Map.class );
+			data = Message2BeanUtil.bean( resp, new TypeReference<Map<String, Object>>() {
+			} );
 		}
 		catch ( ParseException | IOException e ) {
 			log.warn( "登录失败" );
