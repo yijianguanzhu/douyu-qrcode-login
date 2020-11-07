@@ -109,4 +109,17 @@ public final class DouyuHttpRequestConfig {
 					this.put( "X-Requested-With", "XMLHttpRequest" );
 				}
 			} );
+
+	/**
+	 * 验证&&获取csrf
+	 */
+	public static final String CSRF_TOKEN_URL = "https://www.douyu.com/curl/csrfApi/getCsrfCookie";
+	@SuppressWarnings("serial")
+	public static final Map<String, String> CSRF_TOKEN_URL_HEADERS = Collections
+			.unmodifiableMap( new LinkedHashMap<String, String>() {
+				{
+					this.put( HttpHeaders.USER_AGENT,
+							"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/86.0.4240.75 Safari/537.36" );
+				}
+			} );
 }
