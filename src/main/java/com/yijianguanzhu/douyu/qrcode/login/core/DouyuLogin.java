@@ -8,7 +8,9 @@ import java.nio.charset.StandardCharsets;
 import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
+import java.util.function.Consumer;
 
+import com.yijianguanzhu.douyu.qrcode.login.core.config.DefaultCompletableFuture;
 import org.apache.http.HttpResponse;
 import org.apache.http.ParseException;
 import org.apache.http.entity.ContentType;
@@ -82,6 +84,14 @@ public final class DouyuLogin {
 	public static CompletableFuture<SuccessScanQRCode> getLoginUrl( final long ttl, final String code ) {
 		final CompletableFuture<SuccessScanQRCode> future = new CompletableFuture<>();
 		final DefaultWaitScanQRCodeRunnable runnable = new DefaultWaitScanQRCodeRunnable( future, ttl, code );
+		runnable.schedule();
+		return future;
+	}
+
+	// 获取登录url(异步回调)
+	public static DefaultCompletableFuture<SuccessScanQRCode> waitScan( final long ttl, final String code, Consumer<String> consumer ) {
+		final DefaultCompletableFuture<SuccessScanQRCode> future = new DefaultCompletableFuture<>();
+		final DefaultWaitScanQRCodeRunnable runnable = new DefaultWaitScanQRCodeRunnable( future, ttl, code, consumer );
 		runnable.schedule();
 		return future;
 	}
