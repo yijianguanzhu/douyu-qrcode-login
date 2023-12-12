@@ -190,7 +190,6 @@ public final class Http {
 	/* 自定义管理httpClient连接池 */
 	private static class HttpClientBuilder {
 
-		private static PoolingHttpClientConnectionManager manager = null;
 		private static HttpClient httpClient = null;
 
 		private static HttpClient init() {
@@ -199,15 +198,8 @@ public final class Http {
 
 		/** 初始化HttpClient */
 		static {
-
-			manager = new PoolingHttpClientConnectionManager();
-			manager.setMaxTotal( 400 );// 设置整个连接池最大连接数
-			manager.setDefaultMaxPerRoute( 50 ); // 表示将每个路由的默认最大连接数设置为max
-			/** 在多少秒不活动后，验证连接是否断开 */
-			manager.setValidateAfterInactivity( 60000 );
-
 			httpClient = HttpClients.custom()
-					.setConnectionManager( manager )
+					.useSystemProperties()
 					.setDefaultRequestConfig( RequestConfig
 							.custom()
 							.setSocketTimeout( READ_TIMEOUT )
